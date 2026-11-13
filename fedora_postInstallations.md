@@ -5,18 +5,21 @@ set HOSTNAME yourLinuxHostName
 hostnamectl set-hostname $HOSTNAME
 ```
 
+## Create basic directories
+
+mkdir -pv $HOME/westerndigital/
+mkdir -pv $HOME/restored_data
+sudo mkdir -pv /etc/Yubico 
+
 
 ## Install all softwares
 
 ```shell
-sudo dnf install cascadia-mono-pl-fonts.noarch fish vim \
+sudo dnf install cascadia-mono-pl-fonts.noarch zsh vim \
 pass yubikey-manager hwinfo pam-u2f restic pamu2fcfg \
 seahorse podman-compose sysstat okular
 ```
 
-## CHAnge shell
-
-chsh -s $(which fish)
 
 ## CHAnge font
 ## CHAnge fish prompt and theme
@@ -25,12 +28,7 @@ add fish variables
 
 ## ADD repo
 
-To install code
- - sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 
-```shell
-echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
-```
 
 
 modify sudoers.d
@@ -102,3 +100,51 @@ initialize pass
 to do
 
 - copy your public key in westernmedia and on github
+
+
+## Basic Software
+
+### Install Zed 
+
+curl -f https://zed.dev/install.sh | sh
+
+
+### Install code
+
+
+```shell
+echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
+
+sudo dnf install --refresh code
+```
+
+## Configure ZSH and powerlevel10k
+
+
+
+```bash
+
+git clone https://github.com/zsh-users/zsh-autosuggestions 
+  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+
+git clone https://github.com/zsh-users/zsh-syntax-highlighting 
+  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+## After cloning both, open ~/.zshrc and find the plugins=(...) line. Add both to the list:
+
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+
+# Install these fonts
+
+## MesloLGS NF Regular.ttf
+## MesloLGS NF Bold.ttf
+## MesloLGS NF Italic.ttf
+## MesloLGS NF Bold Italic.ttf
+
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git 
+  "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+source ~/.zshrc
+

@@ -1,4 +1,12 @@
 
+## Create basic directories
+mkdir -pv $HOME/westerndigital/
+mkdir -pv $HOME/restored_data
+
+# Temporary gpg location
+export RESTIC_PASSWORD_COMMAND="gpg --quiet --decrypt ${HOME}/Downloads/myTrueResticPasswd.gpg.asc"
+
+
 export mountpoint="$HOME/westerndigital/"
 
 sudo mount -v /dev/disk/by-uuid/b3a9c52a-92a4-4e05-b533-026874f544b6 $mountpoint
@@ -41,6 +49,18 @@ sudo udisksctl power-off -b /dev/disk/by-uuid/b3a9c52a-92a4-4e05-b533-026874f544
 
 # Restoring
 
-restic --password-command $RESTIC_PASSWORD_COMMAND \
+restic --password-command "$RESTIC_PASSWORD_COMMAND" \
 -r $mountpoint --verbose \
 restore --target $HOME/restored_data be0aa679
+
+
+## Restoring to original location
+
+cd $HOME/restored_data
+
+# e.g. --> cp -vR  home/$USERNAME/gitrepos $HOME/
+
+cp -vR Documents $HOME/ # no need to provide dir name at destination
+cp -vR $HOME/Documents/dotfiles/.ssh ~/
+cp -vR $HOME/Documents/dotfiles/.vim ~/
+
